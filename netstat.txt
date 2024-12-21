@@ -1,0 +1,37 @@
+thor@jumphost ~/kkelabs$ more   runsudocommand.bash           
+#userarr=(tony steve banner)
+userarr=(tony)
+hostarr=(stapp01 stapp02 stapp03)
+passarr=(Ir0nM@n Am3ric@ BigGr33n)
+
+for i in ${!userarr[*]}
+  do 
+    echo "starting ${userarr[i]}@${hostarr[i]}"
+    #echo ${passarr[i]} | ssh -o StrictHostKeyChecking=no ${userarr[i]}@${hostarr[i]} sudo -S systemctl status httpd
+    #echo ${passarr[i]} | ssh -o StrictHostKeyChecking=no ${userarr[i]}@${hostarr[i]} sudo -S systemctl start httpd
+    #echo ${passarr[i]} | ssh -o StrictHostKeyChecking=no ${userarr[i]}@${hostarr[i]} sudo -S systemctl status httpd -l
+    echo ${passarr[i]} |ssh -o StrictHostKeyChecking=no ${userarr[i]}@${hostarr[i]} sudo -S netstat -lpn
+  done
+thor@jumphost ~/kkelabs$ 
+
+
+#############
+##############
+thor@jumphost ~/kkelabs$ bash   runsudocommand.bash                                                                          
+starting tony@stapp01                                                                                                        
+[sudo] password for tony: Active Internet connections (only servers)                                                         
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name                             
+tcp        0      0 0.0.0.0:111             0.0.0.0:*               LISTEN      1/init                                       
+tcp        0      0 127.0.0.1:6100          0.0.0.0:*               LISTEN      547/sendmail: accep                          
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      416/sshd                                     
+tcp        0      0 127.0.0.11:33833        0.0.0.0:*               LISTEN      -                                            
+tcp6       0      0 :::111                  :::*                    LISTEN      399/rpcbind                                  
+tcp6       0      0 :::22                   :::*                    LISTEN      416/sshd                                     
+udp        0      0 0.0.0.0:111             0.0.0.0:*                           1/init                                       
+udp        0      0 0.0.0.0:992             0.0.0.0:*                           399/rpcbind                                  
+udp        0      0 127.0.0.11:44087        0.0.0.0:*                           -                                            
+udp6       0      0 :::111                  :::*                                399/rpcbind                                  
+udp6       0      0 :::992                  :::*                                399/rpcbind       
+
+### we use systemctl stop sendmail instead of kill -9 on sendmail
+### good practice to end processes gracefull where possible
